@@ -1,21 +1,18 @@
-name: Test Pipeline
+﻿name: Build and Push
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-and-push:
     runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Say hello
-        run: echo "Hello from the self-hosted runner!"
+      - name: Build Docker image
+        run: docker build -t 192.168.1.53:5000/test-app:latest .
 
-      - name: Check Docker is available
-        run: docker --version
-
-      - name: Show current directory
-        run: pwd && ls -la
+      - name: Push image to registry
+        run: docker push 192.168.1.53:5000/test-app:latest
